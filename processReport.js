@@ -29,4 +29,4 @@ function process (logFile) {
   })
 }
 
-process('input1.log')
+process('input.log')
