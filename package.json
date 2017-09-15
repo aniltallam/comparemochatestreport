@@ -4,6 +4,7 @@
   "description": "process mocha test results log",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.5.0",
     "strip-ansi": "^3.0.1"
   }
 }
