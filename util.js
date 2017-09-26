@@ -23,6 +23,7 @@ function deepClone (obj) {
 }
 
 function toMinutes (inMs) {
+  if (typeof inMs !== 'number') return inMs
   return Math.round(inMs / 600) / 100
 }
 

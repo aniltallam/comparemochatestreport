@@ -52,7 +52,7 @@ function createBuildReport (logsDir, metaFile, outputFile) {
 
 function generateHtmlTableFromTestsData2 (testsJson) {
   var htmlTable = '<table style="width:100%">' +
-    '<tr><th>#</th><th>File</th><th>Test Name</th><th>Durs</th><th>Change</th></tr>\n'
+    '<tr><th>#</th><th>File</th><th>Test Name</th><th>Status</th><th>Durs</th><th>Change</th></tr>\n'
   testsJson.forEach(function (test, index) {
     // test, file, suite, dur
     var durs = JSON.stringify(test.durs.map(function (val) { return util.toMinutes(val) }))
@@ -60,6 +60,7 @@ function generateHtmlTableFromTestsData2 (testsJson) {
       '<td>' + (index + 1) + '</td>' +
       '<td>' + test.file + '</td>' +
       '<td>' + test.test + '</td>' +
+      '<td>' + test.status + '</td>' +
       '<td>' + durs + '</td>' +
       '<td>' + Math.fround(test.change) + ' %</td>' +
     '</tr>'

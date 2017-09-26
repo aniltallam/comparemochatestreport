@@ -37,9 +37,11 @@ function combineData (jsonDatas) {
     })
     if (rItem) {
       rItem.durs.push(item.dur)
+      rItem.status.push(item.isPass)
     } else {
       rItem = util.deepClone(item)
       rItem.durs = [rItem.dur]
+      rItem.status = [rItem.isPass]
       rdata.push(rItem)
     }
   }
@@ -54,6 +56,9 @@ function combineData (jsonDatas) {
 function calculateDurChange (cData) {
   var xSum = 0
   var ySum = 0
+  var pY = 0, pX = 0, fY = 0, fX = 0
+  var xPassed = true
+  var yPassed = true
   cData.forEach(function (item) {
     if (item.durs && item.durs.length > 1) {
       var x = item.durs[0]
@@ -61,9 +66,38 @@ function calculateDurChange (cData) {
       item.change = (y - x) * 100.0 / x
       xSum += x
       ySum += y
+      xPassed = xPassed && item.status[0]
+      yPassed = yPassed && item.status[1]
+      if (item.status[0] && item.status[1]) {
+        pY += y; pX += x
+      } else {
+        fY += y; fX += x
+      }
     }
   })
-  var summary = {test: 'Summary of comparison', file: '', durs: [xSum, ySum], change: (ySum - xSum) * 100.0 / xSum}
+  var summary = {
+    test: 'Summary of All',
+    file: '',
+    durs: [xSum, ySum],
+    change: (ySum - xSum) * 100.0 / xSum,
+    status: [xPassed, yPassed]
+  }
+  var psummary = {
+    test: 'Summary of Only Passed',
+    file: '',
+    durs: [pX, pY],
+    change: (pY - pX) * 100.0 / pX,
+    status: [xPassed, yPassed]
+  }
+  var fsummary = {
+    test: 'Summary of Only Failed',
+    file: '',
+    durs: [fX, fY],
+    change: (fY - fX) * 100.0 / fX,
+    status: [xPassed, yPassed]
+  }
+  cData.push(psummary)
+  cData.push(fsummary)
   cData.push(summary)
 }
 
