@@ -4,6 +4,28 @@ var Stream = require('stream')
 var stripAnsi = require('strip-ansi')
 var util = require('./util')
 
+function removeAnsiChars () {
+  var txt = fs.readFileSync('failB.txt')
+  txt = stripAnsi(txt)
+  fs.writeFileSync('failBRes.txt', txt)
+
+  var instream = fs.createReadStream('failB.txt')
+  var outstream = new Stream()
+  var rl = readline.createInterface(instream, outstream)
+
+  var res = ''
+  rl.on('close', function () {
+    // console.log('Result is \n', resJson)
+    fs.writeFileSync('failBRes2.txt', res)
+  })
+  rl.on('error', err => console.error('Error is \n', err))
+  rl.on('line', function (line) {
+    res += stripAnsi(line) + '\n'
+  })
+}
+
+removeAnsiChars()
+
 // Reads a log file and returns the tests json data {test, dur}
 function extractTestDataFromLogFile (logFile, testsMeta, cb) {
   var instream = fs.createReadStream(logFile)
